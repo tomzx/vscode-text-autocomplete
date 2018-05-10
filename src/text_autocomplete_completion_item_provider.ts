@@ -1,6 +1,4 @@
-// import { IConfiguration } from "./configuration";
 import * as TrieSearch from 'trie-search';
-// import { TrieSearch } from 'trie-search';
 import { CompletionItemProvider, TextDocument, Position, CancellationToken, CompletionItem, CompletionContext, ProviderResult, CompletionList, CompletionItemKind, Range } from 'vscode';
 import { wordFrequencies } from './dictionaries/en';
 
@@ -19,15 +17,12 @@ export class TextAutocompleteCompletionItemProvider implements CompletionItemPro
 	protected setupDictionary(): void {
 		this.words = new TrieSearch('key');
 		let i = 0;
-		this.words.addAll(wordFrequencies.map((value) => { return { key: value, index: ++i}; }));
-		// const numberOfWordsInDictionary = wordFrequencies.length;
-		// const items: CompletionItem[] = [];
-		// for (let [i, tag] of wordFrequencies.entries()) {
-		// 	// let completionItem = new CompletionItem(tag, CompletionItemKind.Text);
-		// 	// completionItem.sortText = this.stringPad(i.toString(), numberOfWordsInDictionary.toString().length, '0', 'STR_PAD_LEFT');
-		// 	// items.push(completionItem);
-
-		// }
+		this.words.addAll(wordFrequencies.map((value: string) => {
+			return {
+				key: value,
+				index: ++i
+			};
+		}));
 	}
 
 	public provideCompletionItems(document: TextDocument, position: Position, token: CancellationToken, context: CompletionContext): ProviderResult<CompletionItem[] | CompletionList> {
@@ -36,8 +31,6 @@ export class TextAutocompleteCompletionItemProvider implements CompletionItemPro
 		if (range) {
 			wordToComplete = document.getText(new Range(range.start, position));
 		}
-
-		console.log(wordToComplete);
 
 		const results = this.words.get(wordToComplete);
 
